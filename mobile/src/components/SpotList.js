@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native';
+import {withNavigation} from 'react-navigation';
+import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity , ImageBackground} from 'react-native';
 
 import api from '../services/api';
 
-export default function SpotList({tech}){
+function SpotList({ tech, navigation }){
+
     const [spots, setSpots] = useState([]);
 
     useEffect(() => {
@@ -13,13 +15,14 @@ export default function SpotList({tech}){
             })
 
             setSpots(response.data);
-            console.log(response.data);
         };
 
         loadSpots();
     }, []);
 
-    // const 
+    function handleNavigate(id) {
+        navigation.navigate('Book', {id});
+    };
 
     return (
         <View style={styles.container} >
@@ -31,8 +34,14 @@ export default function SpotList({tech}){
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
+                    
+//Não consegui puxar a thumbnail pela variavel item.thumbnail_url e nem `'${item.thumbnail_url}'`
+
                 <View style={styles.listItem}>
-                    <Image source={{ uri:item.thumbnail_url }} style={styles.thumbnail} />
+                    <Image
+                    source={{ uri:'https://reactnative.dev/img/tiny_logo.png' }}
+                    style={styles.thumbnail}
+                    />
                     <Text style={styles.company}>{item.company}</Text>
                     <Text style={styles.price}>{item.price ? `R$${item.price}/dia` : 'GRATUITO'}</Text>
                     <TouchableOpacity onPress={() => handleNavigate(item._id)} style={styles.button}>
@@ -80,6 +89,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         color: '#333',
         marginTop:10,
+        width:200,
+        
     },
     price:{
         fontSize:15,
@@ -98,5 +109,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight:'bold',
         fontSize:15,
-    }
+    },
 });
+
+export default withNavigation(SpotList);
