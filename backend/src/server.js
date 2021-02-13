@@ -11,7 +11,9 @@ const app = express();
 const server = http.Server(app);
 const io = sockectio(server);
 
-mongoose.connect('mongodb+srv://laslino:laslino@mongoomni-2w3ud.mongodb.net/aircnc?retryWrites=true&w=majority', {
+mongoose.connect(
+    process.env.MONGO_URL, 
+    {
     useNewUrlParser: true,
     useUnifiedTopology: true,    
 });
